@@ -1,0 +1,9 @@
+# don't publish what isn't there!
+.gitignore
+# Ignore M365 documents
+*.doc
+*.docx
+# ignore VS Code workspace
+*.code-workspace
+# ignore JSON files for now
+/CortexJSON/
