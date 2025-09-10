@@ -1,6 +1,34 @@
-# Foundations: Integration between Cortex & HomeAssistant
+# Foundations: Integration between Cortex & HomeAssistant <!-- omit from toc --> 
 
-This document records the hand-crafted configuration of entities and commands using REST, and WebSocket along with considerations for using these approaches for a more generic integration between Cortex and HomeAssistant.  The approaches have been used for 2+ yeas without needing revsion despite many HomeAssistant updates.
+This document records the hand-crafted configuration of entities and commands using REST, and WebSocket along with considerations for using these approaches for a more generic integration between Cortex and HomeAssistant.  The approaches have been used for 2+ yeas without needing revision despite many HomeAssistant updates.
+
+## Table of contents <!-- omit from toc --> 
+- [1. Origins](#1-origins)
+- [2. Aligning distinct world views](#2-aligning-distinct-world-views)
+- [3. Example Dashboard](#3-example-dashboard)
+- [4. Cortex WebAPI set up and responses](#4-cortex-webapi-set-up-and-responses)
+  - [Cortex API requests](#cortex-api-requests)
+- [5. Control Object Types](#5-control-object-types)
+  - [5.1 Temperature, HVAC-Temperature, AnalogueSignal](#51-temperature-hvac-temperature-analoguesignal)
+    - [HomeAssistant Configuration](#homeassistant-configuration)
+      - [configuration.yaml](#configurationyaml)
+    - [Cortex set-up](#cortex-set-up)
+    - [Example JSON response](#example-json-response)
+    - [Automation Thoughts](#automation-thoughts)
+  - [5.2 Room](#52-room)
+    - [HomeAssistant Configuration](#homeassistant-configuration-1)
+      - [configuration.yaml](#configurationyaml-1)
+      - [automation.yaml](#automationyaml)
+    - [Cortex set-up to send object updates to HASS using a webhook](#cortex-set-up-to-send-object-updates-to-hass-using-a-webhook)
+    - [Automation Thoughts](#automation-thoughts-1)
+  - [5.3 Light](#53-light)
+    - [HomeAssistant Configuration](#homeassistant-configuration-2)
+    - [Cortex Configuration](#cortex-configuration)
+    - [Automation Considerations](#automation-considerations)
+  - [5.4 Cortex Object Types for potential integration](#54-cortex-object-types-for-potential-integration)
+- [6. Conclusion](#6-conclusion)
+  - [General Challenges / Unknowns](#general-challenges--unknowns)
+
 
 # 1. Origins
 
@@ -275,7 +303,7 @@ For further rooms or lights simply …
 * Floors could also be set-up, but as they probably don’t hold state (like areas?), there seems little point.
 * Object synchronization: The setup on Cortex is tedious and could be a barrier if large numbers of objects need to be synced. There may be a better way of doing this at scale, discussions with Idratek required.
 
-## Light
+## 5.3 Light
 
 ### HomeAssistant Configuration
 
@@ -345,19 +373,19 @@ Firendly names are easier to use than object IDs but these need to be aligned be
 
 It would be useful include the All Light object to access the GoodNight operation (to switch off the lights of all unoccupied rooms) etc.
 
-## Cortex Object Types for potential integration
+## 5.4 Cortex Object Types for potential integration
 
 It might be useful to integrate the following Cortex Object Types using the recipes above
 
 |  |  |
 | --- | --- |
 | Cortex Object Type | Potential pattern |
-| HVAC | Similar to light using <https://www.home-assistant.io/integrations/climate>  Includes Humidity, but does not have the concept of setpoint by hour |
+| HVAC | Similar pattern to light using <https://www.home-assistant.io/integrations/climate>  Includes Humidity, but does not have the concept of setpoint by hour. Unclear if this can be built from a Template |
 | Hot Water | Similar to light using <https://www.home-assistant.io/integrations/water_heater>  includes ‘eco mode’ concept not seen in Cortex |
-| Light | Possibly illuminance within <https://www.home-assistant.io/integrations/sensor> |
-| onOffLoad (Fan) | <https://www.home-assistant.io/integrations/fan> |
-| OnOffLoad – general | <https://www.home-assistant.io/integrations/switch> |
-| Digital Input, inc bell push, window, door | Boolean or <https://www.home-assistant.io/integrations/sensor> |
+| Light level | Possibly illuminance within <https://www.home-assistant.io/integrations/sensor> and https://www.home-assistant.io/integrations/template/#sensor|
+| onOffLoad (Fan) | <https://www.home-assistant.io/integrations/fan> and https://www.home-assistant.io/integrations/template/#fan |
+| OnOffLoad – general | <https://www.home-assistant.io/integrations/switch> and https://www.home-assistant.io/integrations/template/#switch |
+| Digital Input, inc bell push, window, door | Boolean or <https://www.home-assistant.io/integrations/sensor> and  covered in the Template integration https://www.home-assistant.io/integrations/template/#sensor|
 
 # 6. Conclusion
 
